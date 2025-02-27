@@ -5,6 +5,22 @@
  * 2. second step data key display function showt kortay hoba
  */
 
+
+//  time function convert 
+const timeFunction = (time)=>{
+  const hour = parseInt( time / 3600);
+  let secound = time % 3600;
+  let day = time / 86400; // pora deksi
+  // console.log("secound", secound)
+  const minute = parseInt(secound / 60);
+  // console.log("minute", minute)
+  secound = secound % 60;
+  // console.log("secound 2", secound)
+return `${hour}hrs ${minute} min ${secound}secnd ago  `
+}
+
+
+
 // data feach api call function
 const dataLoad = async () => {
   try {
@@ -41,11 +57,16 @@ const displayDataLoad = (btnData) => {
 
   btnData.forEach((cardItem) => {
     const { category, category_id } = cardItem;
-    const button = document.createElement("button");
-    button.classList.add("btn");
-    button.innerHTML = `${category}`;
+    const buttonContainer = document.createElement("div");
+    buttonContainer.innerHTML = `
+      <button class="btn">
+      ${category}
+      </button>
+    
+    `
+
     // button.innerText = cardItem?.category;
-    catgorayBtn.appendChild(button);
+    catgorayBtn.appendChild(buttonContainer);
   });
 };
 
@@ -55,15 +76,20 @@ const displayDataLoad = (btnData) => {
 const videoCardLoad = (videoCard) => {
   const videoSection = document.querySelector("#video-section");
   videoCard.forEach((itemVideo) => {
-
-     const {thumbnail, title, authors:[{ profile_picture, profile_name, verified }] }= itemVideo
-    const div = document.createElement("div");
+    // console.log(itemVideo)
+     const {thumbnail, title, authors:[{ profile_picture, profile_name, verified }], others: { views, posted_date } }= itemVideo;
+     const div = document.createElement("div");
     div.classList = "card card-compact "
     div.innerHTML = `
-  <figure class="h-52 rounded-lg">
+  <figure class="h-52 rounded-lg relative">
     <img class="h-full w-full bg-center bg-cover object-cover"
       src=${thumbnail}
       alt="Shoes" />
+       ${posted_date?.length == 0 ? "" : `<span class="absolute p-2 bottom-1 right-3 opacity-50 text-white rounded-xl bg-black">
+        ${timeFunction(posted_date)}
+      </span>`}
+      
+      
   </figure>
   <div class="px-0 py-2 flex gap-2">
   <figure>
@@ -77,12 +103,12 @@ const videoCardLoad = (videoCard) => {
     
     </div>
     <div class="badge flex items-center justify-center gap-3 pl-12 pb-1">
-      <p>${profile_name}</p>
-    <img class="w-5 h-5" src="https://img.icons8.com/?size=48&id=D9RtvkuOe31p&format=png" alt=""/>
+      <p class="text-xl py-1">${profile_name}</p>
+      ${verified == true ? `<img class="w-5 h-5" src="https://img.icons8.com/?size=48&id=D9RtvkuOe31p&format=png" alt=""/>` :" "}
     </div>
 
     <div class="pl-12">
-      <p>91K View</p>
+      <p>${views} View</p>
     </div>
          
          `;
