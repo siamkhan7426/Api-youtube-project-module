@@ -19,8 +19,6 @@ const timeFunction = (time)=>{
 return `${hour}hrs ${minute} min ${secound}secnd ago  `
 }
 
-
-
 // data feach api call function
 const dataLoad = async () => {
   try {
@@ -35,8 +33,8 @@ const dataLoad = async () => {
 };
 dataLoad();
 
-// video api function call
 
+// video api function call
 const videoDataLoad = async () => {
   try {
     const res = await fetch(
@@ -48,8 +46,35 @@ const videoDataLoad = async () => {
     console.log("this is my error", error);
   }
 };
-
 videoDataLoad();
+
+
+//  api id call function 
+
+const catagoryId = async (id)=>{
+  
+  try{
+    const res = await fetch(`
+        https://openapi.programming-hero.com/api/phero-tube/category/${id}
+      `)
+      const data = await res.json();
+      videoCardLoad(data?.category)
+  } catch(error){
+    console.log("this is my error", error);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+//   disply show function section 
+
 
 // button function daynamic vaba dispay shoow
 const displayDataLoad = (btnData) => {
@@ -59,7 +84,7 @@ const displayDataLoad = (btnData) => {
     const { category, category_id } = cardItem;
     const buttonContainer = document.createElement("div");
     buttonContainer.innerHTML = `
-      <button class="btn">
+      <button onclick="catagoryId(${category_id})" class="btn">
       ${category}
       </button>
     
@@ -75,6 +100,8 @@ const displayDataLoad = (btnData) => {
 
 const videoCardLoad = (videoCard) => {
   const videoSection = document.querySelector("#video-section");
+  videoSection.innerHTML = ""
+  console.log(videoSection)
   videoCard.forEach((itemVideo) => {
     // console.log(itemVideo)
      const {thumbnail, title, authors:[{ profile_picture, profile_name, verified }], others: { views, posted_date } }= itemVideo;
