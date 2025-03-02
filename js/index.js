@@ -7,8 +7,8 @@
 
 
 //  time function convert 
-const timeFunction = (time)=>{
-  const hour = parseInt( time / 3600);
+const timeFunction = (time) => {
+  const hour = parseInt(time / 3600);
   let secound = time % 3600;
   let day = time / 86400; // pora deksi
   // console.log("secound", secound)
@@ -16,7 +16,7 @@ const timeFunction = (time)=>{
   // console.log("minute", minute)
   secound = secound % 60;
   // console.log("secound 2", secound)
-return `${hour}hrs ${minute} min ${secound}secnd ago  `
+  return `${hour}hrs ${minute} min ${secound}secnd ago  `
 }
 
 // data feach api call function
@@ -51,22 +51,19 @@ videoDataLoad();
 
 //  api id call function 
 
-const catagoryId = async (id)=>{
-  
-  try{
+const catagoryId = async (id) => {
+
+  try {
     const res = await fetch(`
         https://openapi.programming-hero.com/api/phero-tube/category/${id}
       `)
-      const data = await res.json();
-      videoCardLoad(data?.category)
-  } catch(error){
+    const data = await res.json();
+    // videoCardLoad () function call korlam aie jonno jata id dey dora amra data card akara dekhta pari
+    videoCardLoad(data?.category)
+  } catch (error) {
     console.log("this is my error", error);
   }
 }
-
-
-
-
 
 
 
@@ -84,7 +81,7 @@ const displayDataLoad = (btnData) => {
     const { category, category_id } = cardItem;
     const buttonContainer = document.createElement("div");
     buttonContainer.innerHTML = `
-      <button onclick="catagoryId(${category_id})" class="btn">
+      <button id="btn-${cardItem.category_id}" onclick="catagoryId(${category_id})" class="btn catagory-btn">
       ${category}
       </button>
     
@@ -100,12 +97,29 @@ const displayDataLoad = (btnData) => {
 
 const videoCardLoad = (videoCard) => {
   const videoSection = document.querySelector("#video-section");
+  // button click korar por agie content clear hoi jay
   videoSection.innerHTML = ""
-  console.log(videoSection)
+  // jodi amr api tay kono data na thaka ki vaba handel korbo
+  if (videoCard.length == 0) {
+    videoSection.classList.remove("grid")
+    videoSection.innerHTML = `
+    <div class=" flex flex-col justify-center mx-auto  min-h-80 items-center">
+    <img class="bg-center pt-4" src="./Images/Icon.png" alt="icon">
+    <h2 class="text-center mt-5 text-2xl font-semibold">
+        NO VIDEO 
+    </h2>
+    </div>
+    
+    `
+    return
+  } else {
+    videoSection.classList.add("grid")
+  }
+
   videoCard.forEach((itemVideo) => {
     // console.log(itemVideo)
-     const {thumbnail, title, authors:[{ profile_picture, profile_name, verified }], others: { views, posted_date } }= itemVideo;
-     const div = document.createElement("div");
+    const { thumbnail, title, authors: [{ profile_picture, profile_name, verified }], others: { views, posted_date } } = itemVideo;
+    const div = document.createElement("div");
     div.classList = "card card-compact "
     div.innerHTML = `
   <figure class="h-52 rounded-lg relative">
@@ -115,8 +129,6 @@ const videoCardLoad = (videoCard) => {
        ${posted_date?.length == 0 ? "" : `<span class="absolute p-2 bottom-1 right-3 opacity-50 text-white rounded-xl bg-black">
         ${timeFunction(posted_date)}
       </span>`}
-      
-      
   </figure>
   <div class="px-0 py-2 flex gap-2">
   <figure>
@@ -131,7 +143,7 @@ const videoCardLoad = (videoCard) => {
     </div>
     <div class="badge flex items-center justify-center gap-3 pl-12 pb-1">
       <p class="text-xl py-1">${profile_name}</p>
-      ${verified == true ? `<img class="w-5 h-5" src="https://img.icons8.com/?size=48&id=D9RtvkuOe31p&format=png" alt=""/>` :" "}
+      ${verified == true ? `<img class="w-5 h-5" src="https://img.icons8.com/?size=48&id=D9RtvkuOe31p&format=png" alt=""/>` : " "}
     </div>
 
     <div class="pl-12">
@@ -139,7 +151,7 @@ const videoCardLoad = (videoCard) => {
     </div>
          
          `;
-         videoSection.appendChild(div)
+    videoSection.appendChild(div)
   });
 };
 
