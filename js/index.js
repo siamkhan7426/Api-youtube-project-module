@@ -19,6 +19,20 @@ const timeFunction = (time) => {
   return `${hour}hrs ${minute} min ${secound}secnd ago  `
 }
 
+// class button fuction add
+const removeClassBtn = ()=>{
+    const removeBtn = document.getElementsByClassName("catagory-btn");
+    
+    for(let btn of removeBtn){
+        btn.classList.remove("active")
+    }
+    
+
+
+
+}
+
+
 // data feach api call function
 const dataLoad = async () => {
   try {
@@ -52,13 +66,20 @@ videoDataLoad();
 //  api id call function 
 
 const catagoryId = async (id) => {
-
+  // console.log(catagoryId)
   try {
     const res = await fetch(`
         https://openapi.programming-hero.com/api/phero-tube/category/${id}
       `)
+     // console.log(res)
     const data = await res.json();
     // videoCardLoad () function call korlam aie jonno jata id dey dora amra data card akara dekhta pari
+    const activeBtn = document.getElementById(`btn-${id}`);
+    removeClassBtn();
+    activeBtn.classList.add("active");
+    // for(const btnActive of activeBtn){
+    //   console.log(btnActive)
+    // }
     videoCardLoad(data?.category)
   } catch (error) {
     console.log("this is my error", error);
@@ -68,15 +89,10 @@ const catagoryId = async (id) => {
 
 
 
-
-
 //   disply show function section 
-
-
 // button function daynamic vaba dispay shoow
 const displayDataLoad = (btnData) => {
   const catgorayBtn = document.querySelector("#ctgButton");
-
   btnData.forEach((cardItem) => {
     const { category, category_id } = cardItem;
     const buttonContainer = document.createElement("div");
