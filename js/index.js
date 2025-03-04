@@ -64,7 +64,6 @@ videoDataLoad();
 
 
 //  api id call function 
-
 const catagoryId = async (id) => {
   // console.log(catagoryId)
   try {
@@ -86,7 +85,17 @@ const catagoryId = async (id) => {
   }
 }
 
+// video id doray description details button --> function call
+  const loadCatagoryVideoId = async (videoId)=>{
+    try{
+      const res = await fetch(`https://openapi.programming-hero.com/api/phero-tube/video/aaac`);
+      const data = await res.json();
+      console.log(data.video)
 
+    } catch(error) {
+      console.log("this is my error", error);
+    }
+  }
 
 
 //   disply show function section 
@@ -133,8 +142,7 @@ const videoCardLoad = (videoCard) => {
   }
 
   videoCard.forEach((itemVideo) => {
-    // console.log(itemVideo)
-    const { thumbnail, title, authors: [{ profile_picture, profile_name, verified }], others: { views, posted_date } } = itemVideo;
+    const { thumbnail, title,video_id, authors: [{ profile_picture, profile_name, verified }], others: { views, posted_date } } = itemVideo;
     const div = document.createElement("div");
     div.classList = "card card-compact "
     div.innerHTML = `
@@ -161,9 +169,10 @@ const videoCardLoad = (videoCard) => {
       <p class="text-xl py-1">${profile_name}</p>
       ${verified == true ? `<img class="w-5 h-5" src="https://img.icons8.com/?size=48&id=D9RtvkuOe31p&format=png" alt=""/>` : " "}
     </div>
-
     <div class="pl-12">
       <p>${views} View</p>
+      <div class=" mt-2"><button onclick='loadCatagoryVideoId("${video_id}")' class="btn btn-sm btn-error">Details</button>
+      </div>
     </div>
          
          `;
