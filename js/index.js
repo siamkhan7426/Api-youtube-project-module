@@ -47,7 +47,7 @@ const dataLoad = async () => {
 };
 dataLoad();
 
-
+// ------------------------video api call function star -------------------
 // video api function call
 const videoDataLoad = async () => {
   try {
@@ -62,64 +62,7 @@ const videoDataLoad = async () => {
 };
 videoDataLoad();
 
-
-//  api id call function 
-const catagoryId = async (id) => {
-  // console.log(catagoryId)
-  try {
-    const res = await fetch(`
-        https://openapi.programming-hero.com/api/phero-tube/category/${id}
-      `)
-     // console.log(res)
-    const data = await res.json();
-    // videoCardLoad () function call korlam aie jonno jata id dey dora amra data card akara dekhta pari
-    const activeBtn = document.getElementById(`btn-${id}`);
-    removeClassBtn();
-    activeBtn.classList.add("active");
-    // for(const btnActive of activeBtn){
-    //   console.log(btnActive)
-    // }
-    videoCardLoad(data?.category)
-  } catch (error) {
-    console.log("this is my error", error);
-  }
-}
-
-// video id doray description details button --> function call
-  const loadCatagoryVideoId = async (videoId)=>{
-    try{
-      const res = await fetch(`https://openapi.programming-hero.com/api/phero-tube/video/aaac`);
-      const data = await res.json();
-      console.log(data.video)
-
-    } catch(error) {
-      console.log("this is my error", error);
-    }
-  }
-
-
-//   disply show function section 
-// button function daynamic vaba dispay shoow
-const displayDataLoad = (btnData) => {
-  const catgorayBtn = document.querySelector("#ctgButton");
-  btnData.forEach((cardItem) => {
-    const { category, category_id } = cardItem;
-    const buttonContainer = document.createElement("div");
-    buttonContainer.innerHTML = `
-      <button id="btn-${cardItem.category_id}" onclick="catagoryId(${category_id})" class="btn catagory-btn">
-      ${category}
-      </button>
-    
-    `
-
-    // button.innerText = cardItem?.category;
-    catgorayBtn.appendChild(buttonContainer);
-  });
-};
-
-
 // video api card display show funtion
-
 const videoCardLoad = (videoCard) => {
   const videoSection = document.querySelector("#video-section");
   // button click korar por agie content clear hoi jay
@@ -179,5 +122,81 @@ const videoCardLoad = (videoCard) => {
     videoSection.appendChild(div)
   });
 };
+//------------------------------------------- end -----------------------------
+
+//  api id function call kora hosca  videoCardLoad() kacha 
+const catagoryId = async (id) => {
+  try {
+    const res = await fetch(`
+        https://openapi.programming-hero.com/api/phero-tube/category/${id}
+      `)
+     // console.log(res)
+    const data = await res.json();
+    // videoCardLoad () function call korlam aie jonno jata id dey dora amra data card akara dekhta pari
+    const activeBtn = document.getElementById(`btn-${id}`);
+    removeClassBtn();
+    activeBtn.classList.add("active");
+    // for(const btnActive of activeBtn){
+    //   console.log(btnActive)
+    // }
+    videoCardLoad(data?.category)
+  } catch (error) {
+    console.log("this is my error", error);
+  }
+}
+
+// video id doray description details button --> function call
+  const loadCatagoryVideoId = async (videoId)=>{
+    try{
+      const res = await fetch(`https://openapi.programming-hero.com/api/phero-tube/video/${videoId}`);
+      const data = await res.json();
+      detailsBtuoonVideoModal(data.video)
+
+    } catch(error) {
+      console.log("this is my error", error);
+    }
+  }
+
+  // details modal function  call kora holo 
+
+  const detailsBtuoonVideoModal = (video)=>{
+    console.log(video)
+    const {description, thumbnail} = video ;
+    // console.log(description)
+    const modalConatiner = document.querySelector("#modal-container");
+    modalConatiner.innerHTML = `
+    <figure>
+      <img class=" bg-center object-cover rounded-md py-2 " src=${thumbnail} alt="" />
+    </figure>
+    <h3 class="text-lg font-bold">${description}</h3>
+    
+    `
+    
+    // modal show
+    document.querySelector("#showModalData").click()
+  }
+
+
+
+
+
+// button function daynamic vaba dispay shoow //   disply show function section 
+const displayDataLoad = (btnData) => {
+  const catgorayBtn = document.querySelector("#ctgButton");
+  btnData.forEach((cardItem) => {
+    const { category, category_id } = cardItem;
+    const buttonContainer = document.createElement("div");
+    buttonContainer.innerHTML = `
+      <button id="btn-${cardItem.category_id}" onclick="catagoryId(${category_id})" class="btn catagory-btn">
+      ${category}
+      </button>
+    
+    `
+    // button.innerText = cardItem?.category;
+    catgorayBtn.appendChild(buttonContainer);
+  });
+};
+
+
 
 
