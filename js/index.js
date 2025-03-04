@@ -26,9 +26,6 @@ const removeClassBtn = ()=>{
     for(let btn of removeBtn){
         btn.classList.remove("active")
     }
-    
-
-
 
 }
 
@@ -48,11 +45,14 @@ const dataLoad = async () => {
 dataLoad();
 
 // ------------------------video api call function star -------------------
+// note parameter emtey sting dew hoicha defualt amr card gulo show korba
+
 // video api function call
-const videoDataLoad = async () => {
+const videoDataLoad = async (searchText = "") => {
+  // console.log(searchText)
   try {
     const res = await fetch(
-      `https://openapi.programming-hero.com/api/phero-tube/videos`
+      ` https://openapi.programming-hero.com/api/phero-tube/videos?title=${searchText}`
     );
     const data = await res.json();
     videoCardLoad(data?.videos);
@@ -60,9 +60,8 @@ const videoDataLoad = async () => {
     console.log("this is my error", error);
   }
 };
-videoDataLoad();
 
-// video api card display show funtion
+// video api card display card show funtion
 const videoCardLoad = (videoCard) => {
   const videoSection = document.querySelector("#video-section");
   // button click korar por agie content clear hoi jay
@@ -156,6 +155,7 @@ const catagoryId = async (id) => {
       console.log("this is my error", error);
     }
   }
+  videoDataLoad()
 
   // details modal function  call kora holo 
 
@@ -176,10 +176,6 @@ const catagoryId = async (id) => {
     document.querySelector("#showModalData").click()
   }
 
-
-
-
-
 // button function daynamic vaba dispay shoow //   disply show function section 
 const displayDataLoad = (btnData) => {
   const catgorayBtn = document.querySelector("#ctgButton");
@@ -196,6 +192,12 @@ const displayDataLoad = (btnData) => {
     catgorayBtn.appendChild(buttonContainer);
   });
 };
+
+// ------------------------------------ search input event ---------------------
+const searchInput = document.querySelector("#search-input");
+searchInput.addEventListener("keyup", (e)=>{
+  videoDataLoad(e.target.value);
+})
 
 
 
